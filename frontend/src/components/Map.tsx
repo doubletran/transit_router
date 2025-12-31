@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MapContainer, Marker, TileLayer, GeoJSON, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Feature, Geometry } from 'geojson';
 import charmander from '../assets/charmander.png';
+import { Stop } from '../type';
 import { LocateButton } from './LocateButton';
 
 interface MapProps {
@@ -13,10 +14,11 @@ interface MapProps {
   destination: [number, number] | null; // Coordenadas del destino
   onMapDoubleClick: (location: [number, number]) => void; // Función para manejar el doble clic en el mapa
   selectedRoutes: Feature<Geometry>[]; // Rutas seleccionadas a mostrar en el mapa
+  stops: Stop[];
 }
 
-export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selectedRoutes }: MapProps) => {
-  const position: [number, number] = [13.7036, -89.224]; // Coordenadas iniciales del centro del mapa
+export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selectedRoutes , stops}: MapProps) => {
+  const position: [number, number] = [37.760299, -122.446297]; // Coordenadas iniciales del centro del mapa
 
   useEffect(() => {
     console.log('Map received selectedRoute:', selectedRoutes); // Log para ver las rutas seleccionadas recibidas
@@ -40,7 +42,15 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
     });
     return null;
   };
+  const markers = useMemo(
+    () =>
+      stops.map((stop) => (
+        <Marker key={String(stop.id)} position={[stop.lat, stop.lng]}>
 
+        </Marker>
+      )),
+    [stops]
+  );
   return (
     <MapContainer center={position} zoom={13} className="h-screen w-full"> {/* Contenedor del mapa */}
       <TileLayer
@@ -48,6 +58,7 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
         maxZoom={20} // Zoom máximo permitido
         subdomains={['mt0', 'mt1', 'mt2', 'mt3']} // Subdominios utilizados
       />
+
       <MapDoubleClickHandler /> {/* Manejador del doble clic */}
       <LocateButton setOrigin={setOrigin} /> {/* Botón de localización */}
       {origin && <Marker position={origin} icon={defaultIcon} />} {/* Marcador para el origen */}

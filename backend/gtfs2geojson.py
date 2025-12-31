@@ -31,7 +31,7 @@ def gtfs_stops(gtfs, output_f):
 	#TODO
 	stops_file = [x for x in gtfs.namelist() if 'stops' in x][0]
 
-	stops_c = csv.reader(swallow_windows_unicode(gtfs.open(stops_file, 'r')))
+	stops_c = csv.reader(io.TextIOWrapper(gtfs.open(stops_file, 'r')))
 
 	output_layer = geojson.FeatureCollection([])
 	# assume WGS84 CRS

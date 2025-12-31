@@ -3,6 +3,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 import psycopg
+import pandas as pd
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -29,8 +30,26 @@ def get_db_connection():
         password=os.getenv("DB_PASSWORD")
     )
     return conn
-@app.route('/', method=['GET'])
+@app.route('/stops', methods=['GET'])
 def getAllStops():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT json_agg(
+        json_build_object(
+            'id', id,
+            'name', stop_name,
+            'lat', ST_Y(geometry),
+            'lng', ST_X(geometry)
+        )
+    )
+    FROM stop;
+""")
+    data = cursor.fetchall()
+    print(data)
+    return data
+    
+    
 @app.route('/home', methods=['GET'])
 def home():
     """

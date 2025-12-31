@@ -7,11 +7,9 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {  RouteData } from './components/ResultCard'
 import { Feature, Geometry, LineString } from 'geojson'
-import axios from 'axios'
-import { Stop } from './type'
 
 const colors = ['#F72585', '#7209B7', '#4361EE', '#F033FF', '#FF33F0']; // Colores alternativos para las rutas
-const API_URL = 'http://127.0.0.1:5000/'
+
 function App() {
   // Definir estados para la aplicación
   const [origin, setOrigin] = useState<[number, number] | null>(null) // Estado para el origen
@@ -19,13 +17,13 @@ function App() {
   const [routeData, setRouteData] = useState<RouteData[]>([]) // Estado para los datos de la ruta
   const [focusedInput, setFocusedInput] = useState<'origin' | 'destination' | null>(null) // Estado para el input enfocado
   const [selectedRoutes, setSelectedRoutes] = useState<Feature<Geometry>[]>([]) // Estado para las rutas seleccionadas
-  const [loading, setLoading] = useState(true) // Estado de carga
-  const [stops, setStops] = useState<Stop[]>([])
-   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false) // Estado de carga
+
   // Crear referencias para los inputs
   const originRef = useRef<HTMLInputElement>(null)
   const destinationRef = useRef<HTMLInputElement>(null)
- // Manejar la obtención de la ruta
+
+  // Manejar la obtención de la ruta
   const handleGetRoute = async () => {
     if (origin && destination) {
       setLoading(true) // Iniciar el spinner
@@ -118,20 +116,7 @@ function App() {
     if (selectedRoutes.length > 0) {
       console.log('Selected routes changed:', selectedRoutes);
     }
-    const getAllStops = async() =>{
-    try {
-      setLoading(true)
-const response = await axios.get<Stop[]>(`${API_URL}/stops`);
-      console.log('Stop data', response.data[0][0])
-      setStops(response.data[0][0]);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      setStops(null);
-    } };
-    getAllStops();
   }, [selectedRoutes]);
-
 
   return (
     <div className="flex h-screen">
@@ -159,7 +144,6 @@ const response = await axios.get<Stop[]>(`${API_URL}/stops`);
         destination={destination}
         onMapDoubleClick={handleMapDoubleClick}
         selectedRoutes={selectedRoutes}
-        stops={stops}
       />
     </div>
   )
