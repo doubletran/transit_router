@@ -1,0 +1,8 @@
+________________
+Total connected components identified: 435
+Ensuring Transitive closure in serial...
+Before Transitive closure: 2210
+After  Transitive closure (final file): 4322
+Total transfers: 4322
+Longest transfer: 10.8 seconds
+Time required: 29456369.7 minutes

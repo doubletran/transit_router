@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
 from dotenv import load_dotenv
 import os
 import psycopg
@@ -47,9 +48,26 @@ def getAllStops():
 """)
     data = cursor.fetchall()
     print(data)
+    conn.close()
     return data
+@app.route('/nearest_stops', methods=['GET'])
+def getNearestStops():
+    conn = get_db_connection()
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
     
-    
+    if not lat or not lon:
+        return jsonify({"error": "lat and lon required"}), 400
+
+    lat = float(lat)
+    lon = float(lon)
+    #point_2 = request.args.get('point_2')
+    cursor = conn.cursor()
+    cursor.execute("""SELECT json_build_object('id', id, 'name', stop_name) FROM stop ORDER BY geometry <-> ST_SetSRID(ST_MakePoint(%s,%s),4326) LIMIT 1;""", (lon, lat))
+    data = cursor.fetchone()
+    if data is None:
+        return jsonify({"error": "No stop found"})
+    return jsonify(data)
 @app.route('/home', methods=['GET'])
 def home():
     """
