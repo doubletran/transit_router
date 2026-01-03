@@ -5,12 +5,17 @@ from sqlalchemy import create_engine, text
 from geoalchemy2 import Geometry
 from routing.config import DATA_PATH
 import os
+
+from dotenv import load_dotenv
+import os
+load_dotenv()
 # Configuración de la conexión a la base de datos PostgreSQL
-db_name = 'transit_db'
-db_user = 'postgres'
-db_password = 'doubletran'
-db_host = 'localhost'
-db_port = '5432'
+db_name =os.getenv("DB_NAME")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+
 
 # Crear la conexión
 #engine = create_engine(f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')

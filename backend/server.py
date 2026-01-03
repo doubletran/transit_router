@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
+from db.stop import getNearestStop
 from dotenv import load_dotenv
 import os
 import psycopg
@@ -70,6 +70,15 @@ def getNearestStop():
     return jsonify(data)
 @app.route('/journey', methods=['GET'])
 def getJourney():
+    conn = get_db_connection()
+    srclat = request.args.get('fromlat')
+    srclon = request.args.get('fromlon')
+    destlat = request.args.get('tolat')
+    destlon = request.args.get('tolon')
+    srcstop = getNearestStop(srclat, srclon)
+    deststop = getNearestStop(destlat, destlon)
+    
+    
     
 @app.route('/home', methods=['GET'])
 def home():
