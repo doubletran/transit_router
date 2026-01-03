@@ -50,8 +50,8 @@ def getAllStops():
     print(data)
     conn.close()
     return data
-@app.route('/nearest_stops', methods=['GET'])
-def getNearestStops():
+@app.route('/stop', methods=['GET'])
+def getNearestStop():
     conn = get_db_connection()
     lat = request.args.get('lat')
     lon = request.args.get('lon')
@@ -68,6 +68,9 @@ def getNearestStops():
     if data is None:
         return jsonify({"error": "No stop found"})
     return jsonify(data)
+@app.route('/journey', methods=['GET'])
+def getJourney():
+    
 @app.route('/home', methods=['GET'])
 def home():
     """
