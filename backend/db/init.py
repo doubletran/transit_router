@@ -19,6 +19,7 @@ db_port = os.getenv("DB_PORT")
 
 # Crear la conexión
 #engine = create_engine(f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+
 engine = create_engine(f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 def read_california_transit():
 
@@ -44,6 +45,13 @@ def read_sfo_transit():
     index=False)
 read_california_transit()
 def read_mapping():
+  trip_df = pd.read_csv(os.path.join(DATA_PATH,"trips.txt"))
+  trip_df.to_sql(    
+    name="trip_mapping",
+    con=engine,
+    if_exists="replace",
+    index=False
+  )
   stops_df = pd.read_csv(os.path.join(DATA_PATH,"stops_mappings.csv"))
   stops_df.to_sql(
     name="sfo_stop_mapping",

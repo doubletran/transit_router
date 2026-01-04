@@ -1,11 +1,11 @@
-import scripts.build_transfer_file as build_transfer_file
-from scripts.GTFS_wrapper import gtfs2db
-from scripts.build_transfer_file import build_transfer
-from RAPTOR.std_raptor import raptor
 
-from scripts.build_dict import *
+from routing.scripts.GTFS_wrapper import gtfs2db
+from routing.scripts.build_transfer_file import build_transfer
+from routing.RAPTOR.std_raptor import raptor
+
+from routing.scripts.build_dict import *
 import os
-from config import *
+from routing.config import *
 
 """
 Module contains functions to load the GTFS data.
@@ -72,7 +72,7 @@ def load_all_dict():
 
 
 
-def main():
+def compute_raptor(src, dest, date):
   #gtfs2db(NETWORK_NAME, 20250830)
   #build_transfer(NETWORK_NAME)
   stops_file, trips_file, stop_times_file, transfers_file = load_all_db()
@@ -88,6 +88,5 @@ def main():
       footpath_dict = build_save_footpath_dict(transfers_file, NETWORK_NAME)
       idx_by_route_stop_dict =build_stop_idx_in_route(stop_times_file, NETWORK_NAME)
       routesindx_by_stop_dict = build_routesindx_by_stop_dict(NETWORK_NAME)
-      raptor()
-  raptor(101, 110,pd.to_datetime('2025-08-30 05:41:00'), 3,1, 10, 1, routes_by_stop_dict,stops_dict,stoptimes_dict, footpath_dict,idx_by_route_stop_dict)
-main()
+
+  return raptor(src, dest, date, 3,1, 10, 1, routes_by_stop_dict,stops_dict,stoptimes_dict, footpath_dict,idx_by_route_stop_dict)

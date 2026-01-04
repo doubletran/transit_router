@@ -2,7 +2,7 @@
 Module contains RAPTOR implementation.
 """
 
-from RAPTOR.raptor_functions import *
+from routing.RAPTOR.raptor_functions import *
 
 def raptor(SOURCE: int, DESTINATION: int, D_TIME, MAX_TRANSFER: int, WALKING_FROM_SOURCE: int, CHANGE_TIME_SEC: int, PRINT_ITINERARY: int,
            routes_by_stop_dict: dict, stops_dict: dict, stoptimes_dict: dict, footpath_dict: dict, idx_by_route_stop_dict: dict) -> list:
@@ -115,6 +115,6 @@ def raptor(SOURCE: int, DESTINATION: int, D_TIME, MAX_TRANSFER: int, WALKING_FRO
                 # print('code ended with termination condition')
                 pass
             break
-    _, _, rap_out = post_processing(DESTINATION, pi_label, PRINT_ITINERARY, label)
+    _, trips, rap_out,journey = post_processing(DESTINATION, pi_label, PRINT_ITINERARY, label)
     out.append(rap_out)
-    return out
+    return trips,out, journey

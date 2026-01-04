@@ -143,7 +143,7 @@ def post_processing(DESTINATION: int, pi_label: dict, PRINT_ITINERARY: int, labe
         if PRINT_ITINERARY == 1:
             _print_Journey_legs(pareto_set)
         #        _save_routesExplored(save_routes, routes_exp)
-        return rounds_inwhich_desti_reached, trip_set, rap_out
+        return rounds_inwhich_desti_reached, trip_set, rap_out,journey
 
 
 def _print_Journey_legs(pareto_journeys: list) -> None:
