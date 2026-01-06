@@ -25,17 +25,20 @@ const getRoute = async (
   origin: [number, number],
   destination: [number, number]
 ) => {
+  /*
   const distance = calculateDistance(origin, destination); // Calcular la distancia entre el origen y el destino
 
   if (distance < 500) {
     toast.warn('Puedes llegar caminando.'); // Mostrar advertencia si la distancia es menor a 500 metros
     return null; // No continuar con la solicitud a la API
   }
-
-  const url = 'http://127.0.0.1:5000/home'; // URL de la API
+*/
+  const url = 'http://127.0.0.1:5000/journey'; // URL de la API
   const params = {
-    point_1: `${origin[1]} ${origin[0]}`, // Latitude Longitude para el punto 1
-    point_2: `${destination[1]} ${destination[0]}` // Latitude Longitude para el punto 2
+    fromlat: origin[1],
+    fromlon: origin[0],
+    tolat:destination[1],
+    tolon: destination[0]
   };
 
   try {
@@ -43,8 +46,8 @@ const getRoute = async (
     console.log('Origin:', origin);
     console.log('Destination:', destination);
 
-    console.log('point_1:', params.point_1);
-    console.log('point_2:', params.point_2);
+    console.log('source:', origin);
+    console.log('dest:', destination);
     const response = await axios.get(url, { params }); // Hacer la solicitud a la API
 
     // Si response.data es un objeto vacío, lanzar un toast

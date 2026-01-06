@@ -77,9 +77,19 @@ def getJourney():
     destlon = request.args.get('tolon')
     srcStop = StopService.getNearestStop(srclat, srclon)
     destStop = StopService.getNearestStop(destlat, destlon)
-    journey = RouteService.get_optimal_route(srcStop,destStop, pd.to_datetime('2025-08-30 05:41:00'))
-    return jsonify(journey)
-    
+    print(srcStop)
+    print(destStop)
+    try:
+        #journey, geometry= RouteService.get_optimal_route(srcStop,destStop, pd.to_datetime('2025-08-30 05:41:00'))
+        journey, geometry= RouteService.get_optimal_route(913,3016, pd.to_datetime('2025-08-30 05:41:00'))
+        res = {"journey": journey, "geometry": geometry}
+        return jsonify(res), 200
+    except Exception as e:
+        return jsonify(
+            error="Internal server error",
+            details=str(e)
+        ), 500
+
     
     
 @app.route('/home', methods=['GET'])

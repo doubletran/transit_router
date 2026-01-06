@@ -33,6 +33,7 @@ function App() {
         // Llamar a la API para obtener la ruta
         const data = await getRoute(origin, destination)
         // Formatear los datos obtenidos
+        /*
         const formattedData: RouteData[] = data.map((item: any) => ({
           properties: {
             bus_number: item.properties.bus_number,
@@ -53,7 +54,16 @@ function App() {
           coordinates: item.geometry.coordinates,
         }))
         setRouteData(formattedData) // Actualizar el estado con los datos formateados
-        console.log('Route data fetched and formatted:', formattedData)
+        */
+       let routes = []
+       for (const route of data.geometry){
+        console.log(route)
+        routes.push(route)
+ 
+       }
+        setSelectedRoutes(routes)
+       //setSelectedRoutes(data.geometry)
+        console.log('Route data fetched and formatted:',data)
       } catch (error) {
         console.error('Error fetching route:', error) // Manejar errores
       } finally {
@@ -111,7 +121,7 @@ function App() {
     setSelectedRoutes([]);
     if (originRef.current) originRef.current.value = '';
     if (destinationRef.current) destinationRef.current.value = '';
-  };
+  }
 
   // Efecto para detectar cambios en las rutas seleccionadas
   useEffect(() => {
@@ -143,7 +153,7 @@ const response = await axios.get<Stop[]>(`${API_URL}/stops`);
         onGetRoute={handleGetRoute} // Función para obtener la ruta
         onClean={handleClean} // Función para limpiar los datos
         data={routeData.map(rd => rd.properties)} // Datos de la ruta
-        onRouteSelect={handleRouteSelect} // Función para seleccionar la ruta
+      //  onRouteSelect={handleRouteSelect} // Función para seleccionar la ruta
         loading={loading} // Estado de carga
       />
       <Map

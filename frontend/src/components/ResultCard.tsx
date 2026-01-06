@@ -28,11 +28,11 @@ export interface RouteData {
 
 export interface ResultCardProps {
   properties: Properties;
-  onRouteSelect: (coordinates: [number, number][][]) => void; // Ajuste para las coordenadas
+ // onRouteSelect: (coordinates: [number, number][][]) => void; // Ajuste para las coordenadas
   isSelected: boolean; // Nueva prop para indicar si la ruta está seleccionada
 }
 
-export const ResultCard = ({ properties, onRouteSelect, isSelected }: ResultCardProps) => {
+export const ResultCard = ({ properties,isSelected }: ResultCardProps) => {
   const {
     bus_number,
     route,
@@ -49,12 +49,13 @@ export const ResultCard = ({ properties, onRouteSelect, isSelected }: ResultCard
     route_3_type,
     coordinates, // Asegúrate de desestructurar las coordenadas
   } = properties;
-
+/*
   const handleSetRoute = (event: React.MouseEvent) => {
     event.stopPropagation(); // Detiene la propagación del evento
     console.log('Route set:', coordinates);
     onRouteSelect(coordinates); // Llama al manejador de selección de ruta
   };
+  */
 
   const renderTag = (text: string, icon: any, color: string, icon2?: any) => (
     <Tag Text={text} Icon={icon} Color={color} Icon2={icon2} /> // Renderiza una etiqueta con los íconos y el color correspondiente

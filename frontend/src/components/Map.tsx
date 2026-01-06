@@ -63,7 +63,8 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
       <LocateButton setOrigin={setOrigin} /> {/* Botón de localización */}
       {origin && <Marker position={origin} icon={defaultIcon} />} {/* Marcador para el origen */}
       {destination && <Marker position={destination} icon={defaultIcon} />} {/* Marcador para el destino */}
-      {selectedRoutes.map((route, index) => (
+      {selectedRoutes.length > 0 && selectedRoutes.map((route, index) => (
+      
         <GeoJSON
           key={index}
           data={route} // Datos de la ruta en formato GeoJSON

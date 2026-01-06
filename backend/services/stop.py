@@ -1,7 +1,7 @@
-from db.connect import get_db_connection
+from db import connectDb
 
 def getNearestStop(lat: float, lon: float)->int:
-    conn = get_db_connection()
+    conn = connectDb()
     #point_2 = request.args.get('point_2')
     cursor = conn.cursor()
     cursor.execute("""SELECT id, stop_name FROM stop ORDER BY geometry <-> ST_SetSRID(ST_MakePoint(%s,%s),4326) LIMIT 1;""", (lon, lat))
@@ -11,7 +11,7 @@ def getNearestStop(lat: float, lon: float)->int:
     id, name = data
     return id
 def getReducedStopId(stopId:int) -> int:
-  conn  = get_db_connection()
+  conn  = connectDb()
   cursor = conn.cursor()
   cursor.execute("""SELECT new_stop_id FROM sfo_stop_mapping WHERE stop_id=%s;""",(stopId,))
   data = cursor.fetchone()
@@ -22,7 +22,7 @@ def getReducedStopId(stopId:int) -> int:
   print(id)
   return id
 def getOrigStopId(reducedStopId:int) -> int:
-  conn  = get_db_connection()
+  conn  = connectDb()
   cursor = conn.cursor()
   cursor.execute("""SELECT stop_id FROM sfo_stop_mapping WHERE new_stop_id=%s;""",(reducedStopId,))
   data = cursor.fetchone()

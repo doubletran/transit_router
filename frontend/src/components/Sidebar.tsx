@@ -13,7 +13,7 @@ interface SidebarProps {
   destinationRef: RefObject<HTMLInputElement>; // Referencia del input de destino
   onGetRoute: () => void; // Función para obtener la ruta
   data: Properties[]; // Datos de las propiedades de las rutas
-  onRouteSelect: (coordinates: [number, number][][], index: number) => void; // Consistente con App.tsx
+ // onRouteSelect: (coordinates: [number, number][][], index: number) => void; // Consistente con App.tsx
   loading: boolean; // Añadir estado de carga
   onClean: () => void; // Añadir función de limpieza
 }
@@ -24,7 +24,7 @@ export const Sidebar = ({
   destinationRef,
   onGetRoute,
   data,
-  onRouteSelect,
+ // onRouteSelect,
   loading,
   onClean,
 }: SidebarProps) => {
@@ -33,11 +33,12 @@ export const Sidebar = ({
   useEffect(() => {
     console.log('Sidebar data:', data); // Log de los datos del sidebar
   }, [data]);
-
+/*
   const handleRouteSelect = (coordinates: [number, number][][], index: number) => {
     setSelectedRouteIndex(index); // Establecer el índice de la ruta seleccionada
     onRouteSelect(coordinates, index); // Llamar a la función de selección de ruta
   };
+  */
 
   return (
     <div className="w-2/6 h-screen p-1 flex flex-col  overflow-y-auto">
@@ -80,20 +81,7 @@ export const Sidebar = ({
           <PulseLoader color="#4A90E2" loading={loading} size={10} /> {/* Spinner de carga */}
         </div>
       )}
-      <div className="mt-3">
-        {data.length > 0 ? (
-          data.map((properties, index) => (
-            <ResultCard
-              key={index}
-              properties={properties}
-              onRouteSelect={(coordinates) => handleRouteSelect(coordinates, index)} // Manejar la selección de la ruta
-              isSelected={index === selectedRouteIndex} // Pasar el estado seleccionado
-            />
-          ))
-        ) : (
-          <p>Aún no hay resultados</p> // Mensaje cuando no hay resultados
-        )}
-      </div>
+
     </div>
   );
 };
