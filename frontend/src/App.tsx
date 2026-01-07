@@ -130,8 +130,8 @@ function App() {
     }
     const getAllStops = async() =>{
     try {
-      setLoading(true)
-const response = await axios.get<Stop[]>(`${API_URL}/stops`);
+      setLoading(true);
+      const response = await axios.get<Stop[]>(`${API_URL}/stops`);
       console.log('Stop data', response.data[0][0])
       setStops(response.data[0][0]);
       setError(null);
@@ -139,7 +139,20 @@ const response = await axios.get<Stop[]>(`${API_URL}/stops`);
       setError(err.message);
       setStops(null);
     } };
-    getAllStops();
+    const init = async()=>{
+      try{
+          setLoading(true)
+          const response = await axios.get(`${API_URL}/route/NBUS`);
+          console.log(response)
+          setSelectedRoutes([response.data])
+          setError(null);
+      } catch (err) {
+      setError(err.message);
+
+    } };
+      
+    //getAllStops();
+    init()
   }, [selectedRoutes]);
 
 

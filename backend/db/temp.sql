@@ -1,0 +1,1 @@
+SELECT shape_id, shape_pt_sequence FROM shapes WHERE shape_id IN (SELECT shape_id FROM stop_times st JOIN trips t ON st.trip_id=t.trip_id WHERE route_id='NBUS' GROUP BY shape_id) ORDER BY ST_MakePoint(shape_pt_lon, shape_pt_lat) <-> (SELECT ST_MakePoint(stop_lon, stop_lat) FROM stops WHERE stop_id='4943') LIMIT 1

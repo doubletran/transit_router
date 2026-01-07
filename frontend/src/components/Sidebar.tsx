@@ -44,11 +44,11 @@ export const Sidebar = ({
     <div className="w-2/6 h-screen p-1 flex flex-col  overflow-y-auto">
       <div className='px-3'>
         <h1 className="font-montserrat font-black text-2xl text-center mt-4">
-          Ubícate con Avissa
+          Transit Planner
         </h1>
-        <img src={logo} className='h-[150px] m-auto'/> {/* Logo de la aplicación */}
+        <img src={logo} className='h-[100px] m-auto'/> {/* Logo de la aplicación */}
         <h3 className="font-montserrat font-bold text-sm mt-5 mb-1 tracking-widest">
-          ORIGEN
+          ORIGIN
         </h3>
         <Input
           text={'Desde'}
@@ -57,7 +57,7 @@ export const Sidebar = ({
           onFocus={() => setFocusedInput('origin')} // Establecer el input enfocado en origen
         />
         <h3 className="font-montserrat font-bold text-sm mt-5 mb-1 tracking-widest">
-          DESTINO
+          DESTINATION
         </h3>
         <Input
           text={'Hasta'}
@@ -66,13 +66,13 @@ export const Sidebar = ({
           onFocus={() => setFocusedInput('destination')} // Establecer el input enfocado en destino
         />
         <div className="self-center justify-center mt-6 flex flex-row gap-2">
-          <Button onClick={onGetRoute} text='Calcular Ruta' color="bg-[#4361EE]" />
+          <Button onClick={onGetRoute} text='Calculate Route' color="bg-[#4361EE]" />
           {data.length > 0 && (
             <Button onClick={onClean} text={<PiBroomBold />} color="bg-[#D51E43] text-xl font-bold" /> 
           )}
         </div>
         <h3 className="font-montserrat font-bold text-sm mt-5  tracking-widest">
-          RESULTADOS
+          Journey
         </h3>
       </div>
 

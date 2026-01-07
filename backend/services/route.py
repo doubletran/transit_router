@@ -66,7 +66,8 @@ def get_optimal_route(src, dest, dtime):
         if min_x < coord[0] < max_x and min_y < coord[1] < max_y:
           filteredCoords.append(coord)
       print(filteredCoords)
-      fullRoute['geometry']['coordinates'] = filteredCoords
+      
+      #fullRoute['geometry']['coordinates'] = filteredCoords
         
       routes.append(fullRoute)
   
