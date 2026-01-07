@@ -23,8 +23,8 @@ def getGeometry(routeId):
     data = cursor.fetchone()
     if data is None:
       raise LookupError
-    print(data)
-    return data
+    #print(data)
+    return data[0]
     
 def getOrigRouteIdByReducedTripId(reducedTripId):
     conn = connectDb()
@@ -36,8 +36,7 @@ def getOrigRouteIdByReducedTripId(reducedTripId):
       raise LookupError
     print("Found Original RouteId: " + data[0])
     return data[0]
-    
-  
+ 
   
 def get_optimal_route(src, dest, dtime):
   srcStop= getReducedStopId(src)
@@ -51,7 +50,25 @@ def get_optimal_route(src, dest, dtime):
     step = [leg[0], leg[1], leg[2]]
     if leg[0] != "walking":
       routeId = getOrigRouteIdByReducedTripId(leg[4])
-      routes.append(getGeometry(routeId))
+      srcStop = getOrigStopId(leg[1])
+      destStop = getOrigStopId(leg[2])
+      fullRoute = getGeometry(routeId)
+      srcLocation = getLocation(str(srcStop))
+      destLocation = getLocation(str(destStop))
+      min_x= min(srcLocation[0], destLocation[0])
+      max_x = max(srcLocation[0], destLocation[0])
+      min_y = min(srcLocation[1], destLocation[1])
+      max_y = max(srcLocation[1], destLocation[1])
+      print(min_x, max_x, min_y, max_y)
+      filteredCoords = []
+      for coord in fullRoute['geometry']['coordinates']:
+        print(coord)
+        if min_x < coord[0] < max_x and min_y < coord[1] < max_y:
+          filteredCoords.append(coord)
+      print(filteredCoords)
+      fullRoute['geometry']['coordinates'] = filteredCoords
+        
+      routes.append(fullRoute)
   
       
     #leg = ('walking', src, dst, time, arival time)

@@ -10,6 +10,16 @@ def getNearestStop(lat: float, lon: float)->int:
       raise LookupError
     id, name = data
     return id
+def getLocation(stopId):
+  conn = connectDb()
+  cursor = conn.cursor()
+  cursor.execute("""SELECT ST_X(geometry), ST_Y(geometry) FROM stop WHERE stop_id=%s;""", (stopId,))
+  data = cursor.fetchone()
+  if data is None:
+    raise LookupError
+  print(data)
+  conn.close()
+  return [data[0], data[1]]
 def getReducedStopId(stopId:int) -> int:
   conn  = connectDb()
   cursor = conn.cursor()
@@ -34,3 +44,4 @@ def getOrigStopId(reducedStopId:int) -> int:
   return id
 #getNearestStop(37.772618,-122.38978)
 #getMappedStop(3018)
+getLocation('6083')
