@@ -36,7 +36,7 @@ def getOrigRouteIdByReducedTripId(reducedTripId):
       raise LookupError
     print("Found Original RouteId: " + data[0])
     return data[0]
- 
+
   
 def get_optimal_route(src, dest, dtime):
   srcStop= getReducedStopId(src)

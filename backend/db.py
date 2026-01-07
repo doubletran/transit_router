@@ -52,6 +52,7 @@ def read_california_transit():
   stop_gdf = gpd.read_file(stop_path)
   stop_gdf = stop_gdf.to_crs(4326)
   stop_gdf.to_postgis(name="stop", con=engine,if_exists="replace", dtype={"geom": Geometry("POINT",srid=4326 )})
+  
 def read_sfo_transit():
   conn = connectDb("sql")
   stops_df = pd.read_csv("data/sfo_gtfs/stops.txt")
