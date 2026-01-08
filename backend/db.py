@@ -6,6 +6,8 @@ from geoalchemy2 import Geometry
 from routing.config import DATA_PATH
 import psycopg
 import os
+from psycopg.rows import dict_row
+
 
 from dotenv import load_dotenv
 import os
@@ -35,6 +37,25 @@ def connectDb(method="psycopg"):
           dbname=os.getenv("DB_NAME"),
           user=os.getenv("DB_USER"),
           password=os.getenv("DB_PASSWORD")
+      )
+    else:
+      conn = create_engine(f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+    return conn
+def connectgtfsDb(method="psycopg"):
+    """
+    Establish a connection to the PostgreSQL database using psycopg.
+    Database connection parameters are retrieved from environment variables.
+
+    Returns:
+        psycopg.Connection: Connection object for interacting with the PostgreSQL database.
+    """
+    if method=="psycopg":
+      conn = psycopg.connect(
+          host=os.getenv("DB_HOST"),
+          port=os.getenv("DB_PORT"),
+          dbname="sfo_gtfs",
+          user=os.getenv("DB_USER"),
+          password=os.getenv("DB_PASSWORD"), row_factory=dict_row
       )
     else:
       conn = create_engine(f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')

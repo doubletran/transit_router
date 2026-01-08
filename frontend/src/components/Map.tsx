@@ -14,7 +14,7 @@ interface MapProps {
   destination: [number, number] | null; // Coordenadas del destino
   onMapDoubleClick: (location: [number, number]) => void; // Función para manejar el doble clic en el mapa
   selectedRoutes: Feature<Geometry>[]; // Rutas seleccionadas a mostrar en el mapa
-  stops: Stop[];
+  stops: Feature<Geometry>[] ;
 }
 
 export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selectedRoutes , stops}: MapProps) => {
@@ -72,9 +72,23 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
             color: route.properties?.color || '#000000', // Color de la ruta
             weight: 5, // Grosor de la línea de la ruta
             opacity: 0.8, // Opacidad de la línea de la ruta
+          })}  
+           />
+        ))}
+        {stops.length > 0 && stops.map((route, index) => (
+      
+        <GeoJSON
+          key={index}
+          data={route} // Datos de la ruta en formato GeoJSON
+          style={() => ({
+            color: route.properties?.color || '#000000', // Color de la ruta
+            weight: 5, // Grosor de la línea de la ruta
+            opacity: 0.8, // Opacidad de la línea de la ruta
           })}
-        />
-      ))}
+          />
+        ))}
+       
+
     </MapContainer>
   );
 };

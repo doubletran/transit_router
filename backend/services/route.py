@@ -2,7 +2,7 @@ from routing.main import compute_raptor
 import pandas as pd
 from services.stop import *
 from flask import jsonify
-from db import connectDb
+from db import connectDb, connectgtfsDb
 def get_route_by_trip(tripId):
     conn = connectDb()
     #point_2 = request.args.get('point_2')
@@ -34,11 +34,27 @@ def getOrigRouteIdByReducedTripId(reducedTripId):
     data = cursor.fetchone()
     if data is None:
       raise LookupError
-    print("Found Original RouteId: " + data[0])
+    print("Found Original RouteId: ",data[0])
     return data[0]
+def getRouteColor(routeId):
+  conn = connectgtfsDb()
+  cursor = conn.cursor()
+  cursor.execute("""SELECT route_color FROM routes WHERE route_id=%s""",(routeId,))
+  data = cursor.fetchone()
+  if data is None:
+      raise LookupError(f"Route {routeId} not found")
+    
+  return data["route_color"]
+def getTripSegment(srcStopId, destStopId):
+  conn = connectgtfsDb()
+  cursor = conn.cursor()
+  cursor.execute("""SELECT route_id, geojson FROM public.get_trip_shape_segment(%s, %s)""",(srcStopId,destStopId))
+  data = cursor.fetchone()
+  if data is None:
+      raise LookupError
+  return data
 
-  
-def get_optimal_route(src, dest, dtime):
+def getOptimalRoute(src, dest, dtime):
   srcStop= getReducedStopId(src)
   destStop = getReducedStopId(dest)
   trips, _, journey = compute_raptor(srcStop, destStop, dtime)
@@ -49,27 +65,16 @@ def get_optimal_route(src, dest, dtime):
     print(leg)
     step = [leg[0], leg[1], leg[2]]
     if leg[0] != "walking":
-      routeId = getOrigRouteIdByReducedTripId(leg[4])
       srcStop = getOrigStopId(leg[1])
       destStop = getOrigStopId(leg[2])
-      fullRoute = getGeometry(routeId)
-      srcLocation = getLocation(str(srcStop))
-      destLocation = getLocation(str(destStop))
-      min_x= min(srcLocation[0], destLocation[0])
-      max_x = max(srcLocation[0], destLocation[0])
-      min_y = min(srcLocation[1], destLocation[1])
-      max_y = max(srcLocation[1], destLocation[1])
-      print(min_x, max_x, min_y, max_y)
-      filteredCoords = []
-      for coord in fullRoute['geometry']['coordinates']:
-        print(coord)
-        if min_x < coord[0] < max_x and min_y < coord[1] < max_y:
-          filteredCoords.append(coord)
-      print(filteredCoords)
-      
-      #fullRoute['geometry']['coordinates'] = filteredCoords
-        
-      routes.append(fullRoute)
+      trip= getTripSegment(str(srcStop), str(destStop))
+      routeId = trip["route_id"]
+      routeColor = getRouteColor(routeId)
+      routeGeojson= {'type': 'Feature',
+                     'properties': {'color': f'#{routeColor}'},
+                     'geometry': trip["geojson"]}
+      print(routeGeojson)
+      routes.append(routeGeojson)
   
       
     #leg = ('walking', src, dst, time, arival time)
@@ -83,10 +88,10 @@ def get_optimal_route(src, dest, dtime):
 
   return journeyList, routes
     
-    
+
     
 
-#get_optimal_route(913, 3016,pd.to_datetime('2025-08-30 05:41:00') )
+#,get_optimal_route(913, 3016,pd.to_datetime('2025-08-30 05:41:00') )
 #getOrigRouteByReducedTripId("1133_5")
   
   

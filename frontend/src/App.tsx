@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import {  RouteData } from './components/ResultCard'
 import { Feature, Geometry, LineString } from 'geojson'
 import axios from 'axios'
-import { Stop } from './type'
+
 
 const colors = ['#F72585', '#7209B7', '#4361EE', '#F033FF', '#FF33F0']; // Colores alternativos para las rutas
 const API_URL = 'http://127.0.0.1:5000/'
@@ -20,7 +20,7 @@ function App() {
   const [focusedInput, setFocusedInput] = useState<'origin' | 'destination' | null>(null) // Estado para el input enfocado
   const [selectedRoutes, setSelectedRoutes] = useState<Feature<Geometry>[]>([]) // Estado para las rutas seleccionadas
   const [loading, setLoading] = useState(true) // Estado de carga
-  const [stops, setStops] = useState<Stop[]>([])
+  const [stops, setStops] = useState<Feature<Geometry>[]>([])
    const [error, setError] = useState(null)
   // Crear referencias para los inputs
   const originRef = useRef<HTMLInputElement>(null)
@@ -56,12 +56,13 @@ function App() {
         setRouteData(formattedData) // Actualizar el estado con los datos formateados
         */
        let routes = []
-       for (const route of data.geometry){
+       for (const route of data.routes){
         console.log(route)
         routes.push(route)
  
        }
         setSelectedRoutes(routes)
+        setStops(data.stops)
        //setSelectedRoutes(data.geometry)
         console.log('Route data fetched and formatted:',data)
       } catch (error) {
@@ -152,7 +153,7 @@ function App() {
     } };
       
     //getAllStops();
-    init()
+    //init()
   }, [selectedRoutes]);
 
 

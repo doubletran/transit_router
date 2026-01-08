@@ -1,4 +1,4 @@
-from db import connectDb
+from db import connectDb, connectgtfsDb
 
 def getNearestStop(lat: float, lon: float)->int:
     conn = connectDb()
@@ -10,6 +10,15 @@ def getNearestStop(lat: float, lon: float)->int:
       raise LookupError
     id, name = data
     return id
+def getStop(id):
+  conn = connectgtfsDb()
+  cursor = conn.cursor()
+  cursor.execute("""SELECT stop_id, stop_name, ST_AsGeoJSON(stop_geom)::jsonb as geojson FROM stops WHERE stop_id=%s;""", (id,))
+  data = cursor.fetchone()
+  if data is None:
+    raise LookupError
+  conn.close()
+  return data
 def getLocation(stopId):
   conn = connectDb()
   cursor = conn.cursor()
@@ -44,4 +53,5 @@ def getOrigStopId(reducedStopId:int) -> int:
   return id
 #getNearestStop(37.772618,-122.38978)
 #getMappedStop(3018)
-getLocation('6083')
+#getLocation('6083')
+#print(getStop('6083'))

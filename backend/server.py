@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import services.stop as StopService
 import services.route as RouteService
+import services.journey as Journey
 from dotenv import load_dotenv
 import os
 import psycopg
@@ -81,8 +82,8 @@ def getJourney():
     print(destStop)
     try:
         #journey, geometry= RouteService.get_optimal_route(srcStop,destStop, pd.to_datetime('2025-08-30 05:41:00'))
-        journey, geometry= RouteService.get_optimal_route(913,3016, pd.to_datetime('2025-08-30 05:41:00'))
-        res = {"journey": journey, "geometry": geometry}
+        routes, stops= Journey.getJourney(913,3016, pd.to_datetime('2025-08-30 05:41:00'))
+        res = {"routes":routes , "stops": stops}
         return jsonify(res), 200
     except Exception as e:
         return jsonify(
