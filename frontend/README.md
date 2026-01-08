@@ -9,19 +9,12 @@
 ## Execution
 
 
-2. Navigate to the frontend repo
 ```bash
  cd frontend
-```
-3. Install
-```console
  npm install
+npm run dev
 ```
-4. 
-```bash
- npm run dev
-```
-5. Access the website at [localhost:5173](http://localhost:5173)
+Access the website at [localhost:5173](http://localhost:5173)
 
 ## DOCUMENTATION
 
