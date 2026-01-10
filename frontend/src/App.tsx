@@ -1,11 +1,12 @@
 import { Sidebar } from './components/Sidebar'
 import { Map } from './components/Map'
 import 'leaflet/dist/leaflet.css'
+
 import { useRef, useState, useEffect } from 'react'
 import getRoute from './api/axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import {  RouteData } from './components/ResultCard'
+import {  Trip } from './components/ResultCard'
 import { Feature, Geometry, LineString } from 'geojson'
 import axios from 'axios'
 
@@ -16,7 +17,7 @@ function App() {
   // Definir estados para la aplicación
   const [origin, setOrigin] = useState<[number, number] | null>(null) // Estado para el origen
   const [destination, setDestination] = useState<[number, number] | null>(null) // Estado para el destino
-  const [routeData, setRouteData] = useState<RouteData[]>([]) // Estado para los datos de la ruta
+  const [journey, setJourney] = useState<Trip[]>([]) // Estado para los datos de la ruta
   const [focusedInput, setFocusedInput] = useState<'origin' | 'destination' | null>(null) // Estado para el input enfocado
   const [selectedRoutes, setSelectedRoutes] = useState<Feature<Geometry>[]>([]) // Estado para las rutas seleccionadas
   const [loading, setLoading] = useState(true) // Estado de carga
@@ -32,37 +33,14 @@ function App() {
       try {
         // Llamar a la API para obtener la ruta
         const data = await getRoute(origin, destination)
-        // Formatear los datos obtenidos
-        /*
-        const formattedData: RouteData[] = data.map((item: any) => ({
-          properties: {
-            bus_number: item.properties.bus_number,
-            route: item.properties.route,
-            route_class: item.properties.route_class,
-            route_type: item.properties.route_type,
-            route_1: item.properties.route_1,
-            route_1_class: item.properties.route_1_class,
-            route_1_type: item.properties.route_1_type,
-            route_2: item.properties.route_2,
-            route_2_class: item.properties.route_2_class,
-            route_2_type: item.properties.route_2_type,
-            route_3: item.properties.route_3,
-            route_3_class: item.properties.route_3_class,
-            route_3_type: item.properties.route_3_type,
-            coordinates: item.geometry.coordinates,
-          },
-          coordinates: item.geometry.coordinates,
-        }))
-        setRouteData(formattedData) // Actualizar el estado con los datos formateados
-        */
        let routes = []
-       for (const route of data.routes){
-        console.log(route)
-        routes.push(route)
- 
-       }
-        setSelectedRoutes(routes)
+       let _journey = []
+        setSelectedRoutes(data.routes)
         setStops(data.stops)
+        for (const stop of data.stops){
+          _journey.push(stop['properties'])
+        }
+        setJourney(_journey)
        //setSelectedRoutes(data.geometry)
         console.log('Route data fetched and formatted:',data)
       } catch (error) {
@@ -166,7 +144,7 @@ function App() {
         destinationRef={destinationRef} // Referencia del input de destino
         onGetRoute={handleGetRoute} // Función para obtener la ruta
         onClean={handleClean} // Función para limpiar los datos
-        data={routeData.map(rd => rd.properties)} // Datos de la ruta
+        data={journey} // Datos de la ruta
       //  onRouteSelect={handleRouteSelect} // Función para seleccionar la ruta
         loading={loading} // Estado de carga
       />

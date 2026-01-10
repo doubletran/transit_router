@@ -103,9 +103,6 @@ def getRoute(id):
         ), 500
 
 
-    
-
-
 if __name__ == '__main__':
     # Run the Flask application in debug mode, accessible on all network interfaces
     app.run(debug=True, host='0.0.0.0', port=5000)

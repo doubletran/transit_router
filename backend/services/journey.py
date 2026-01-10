@@ -23,29 +23,34 @@ def getJourney(src, dest, dtime):
                   'properties': {'id':srcStopData["stop_id"], 'name': srcStopData["stop_name"]},
                   'geometry': srcStopData["geojson"]}
   stops.append(stopGeojson)
+  journeyList = []
   for leg in journey:
     print(leg)
-    #step = [leg[0], leg[1], leg[2]]
+
     destStop = getOrigStopId(leg[2])
     destStopData = getStop(str(destStop))
     stopGeojson= {'type': 'Feature',
-                     'properties': {'id':destStopData["stop_id"], 'name': destStopData["stop_name"]},
+                     'properties': {'id':destStopData["stop_id"], 'name': destStopData["stop_name"], 'mode':'walking'},
                      'geometry': destStopData["geojson"]}
     if leg[0] != "walking":
+      
       trip = Route.getTripSegment(str(srcStop), str(destStop))
       print(trip)
       routeId =trip["route_id"]
+      stopGeojson['properties']['mode'] = routeId
       routeColor = Route.getRouteColor(routeId)
       routeGeojson= {'type': 'Feature',
                      'properties': {'color': f'#{routeColor}'},
                      'geometry': trip["geojson"]}
+      stopGeojson['properties']['color'] = str.strip(routeColor)
     else:
       print(srcStopData["geojson"]["coordinates"])
       routeGeojson={'type': 'Feature',
                     'geometry': {'type': 'LineString',
-                                 'dashArray': "5, 8",
+                                 'dashArray': "5 5",
                                  'coordinates':[srcStopData["geojson"]["coordinates"],
                                                destStopData["geojson"]["coordinates"]] }}
+
       
     stops.append(stopGeojson)
     routes.append(routeGeojson)

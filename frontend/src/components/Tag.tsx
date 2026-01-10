@@ -11,11 +11,11 @@ export const Tag = ({
   Icon2?: React.ComponentType<React.SVGProps<SVGSVGElement>> // Tipo del ícono secundario (opcional)
 }) => {
   // Si no se proporciona un color, usar 'bg-amber-500' como color predeterminado
-  const color = Color === undefined ? 'bg-amber-500' : Color
-
+  const color = Color === undefined ? '#8f969eff' : Color
+  console.log(color)
   return (
     // Estilo de la etiqueta con el color de fondo y otras clases de estilo
-    <div className={`${color} rounded-lg py-1 px-2 flex flex-wrap w-fit items-center justify-center`}>
+    <div style={{backgroundColor:color}} className={`rounded-lg py-1 px-2 flex flex-wrap w-fit items-center justify-center`}>
       {/* Renderizar el ícono principal si está disponible */}
       {Icon && <Icon className="text-white text-2xl " />}
       

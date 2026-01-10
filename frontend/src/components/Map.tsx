@@ -42,6 +42,7 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
     });
     return null;
   };
+  /*
   const markers = useMemo(
     () =>
       stops.map((stop) => (
@@ -51,6 +52,7 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
       )),
     [stops]
   );
+  */
   return (
     <MapContainer center={position} zoom={13} className="h-screen w-full"> {/* Contenedor del mapa */}
       <TileLayer

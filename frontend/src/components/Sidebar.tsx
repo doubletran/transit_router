@@ -1,7 +1,7 @@
 import { FaLocationDot, FaRegCircleDot } from 'react-icons/fa6';
 import { Button } from './Button';
 import { Input } from './Input';
-import { ResultCard, Properties } from './ResultCard';
+import { ResultCard,  Trip } from './ResultCard';
 import { RefObject, useState, useEffect } from 'react';
 import { PiBroomBold } from 'react-icons/pi';
 import { PulseLoader } from 'react-spinners'; // Importar el spinner
@@ -12,7 +12,7 @@ interface SidebarProps {
   originRef: RefObject<HTMLInputElement>; // Referencia del input de origen
   destinationRef: RefObject<HTMLInputElement>; // Referencia del input de destino
   onGetRoute: () => void; // Función para obtener la ruta
-  data: Properties[]; // Datos de las propiedades de las rutas
+  data: Trip[]; // Datos de las propiedades de las rutas
  // onRouteSelect: (coordinates: [number, number][][], index: number) => void; // Consistente con App.tsx
   loading: boolean; // Añadir estado de carga
   onClean: () => void; // Añadir función de limpieza
@@ -33,12 +33,6 @@ export const Sidebar = ({
   useEffect(() => {
     console.log('Sidebar data:', data); // Log de los datos del sidebar
   }, [data]);
-/*
-  const handleRouteSelect = (coordinates: [number, number][][], index: number) => {
-    setSelectedRouteIndex(index); // Establecer el índice de la ruta seleccionada
-    onRouteSelect(coordinates, index); // Llamar a la función de selección de ruta
-  };
-  */
 
   return (
     <div className="w-2/6 h-screen p-1 flex flex-col  overflow-y-auto">
@@ -81,7 +75,19 @@ export const Sidebar = ({
           <PulseLoader color="#4A90E2" loading={loading} size={10} /> {/* Spinner de carga */}
         </div>
       )}
+        <div className="mt-3">
+        {data.length > 0 ? (
 
+            <ResultCard
+            journey={data}
+            />
+          )
+         : (
+          <p>Aún no hay resultados</p> // Mensaje cuando no hay resultados
+        )}
+      </div>
     </div>
+
+ 
   );
 };
