@@ -74,6 +74,7 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
             color: route.properties?.color || '#000000', // Color de la ruta
             weight: 5, // Grosor de la línea de la ruta
             opacity: 0.8, // Opacidad de la línea de la ruta
+            dashArray: route.properties?.time ? "5 8" : undefined // e.g. "5 8"
           })}  
            />
         ))}

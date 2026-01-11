@@ -32,7 +32,7 @@ def getTransfer(stop1, stop2):
   print(srcStopId, destStopId)
   conn = connectgtfsDb()
   cursor = conn.cursor()
-  cursor.execute("""SELECT ST_AsGeoJSON(path) as geojson, min_transfer_time FROM transfers WHERE src_stop_id=%s AND dest_stop_id=%s""",(srcStopId,destStopId))
+  cursor.execute("""SELECT ST_AsGeoJSON(path)::jsonb as geojson, min_transfer_time FROM transfers WHERE src_stop_id=%s AND dest_stop_id=%s""",(srcStopId,destStopId))
   data = cursor.fetchone()
   if data is None:
       raise LookupError
