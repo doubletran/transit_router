@@ -6,7 +6,6 @@ NETWORK_NAME = "sfo"
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-
 # Absolute paths (safe)
 DATA_PATH = os.path.join(
     APP_DIR, "Data", "GTFS", NETWORK_NAME

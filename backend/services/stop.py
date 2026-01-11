@@ -1,5 +1,16 @@
 from db import connectDb, connectgtfsDb
 
+def getAllStops():
+    conn = connectgtfsDb()
+    #point_2 = request.args.get('point_2')
+    cursor = conn.cursor()
+    cursor.execute("""SELECT stop_id, ST_X(stop_geom) as stop_lon, ST_Y(stop_geom) as stop_lat FROM stops""")
+    data = cursor.fetchall()
+    if data is None:
+      raise LookupError
+    conn.close()
+    return data
+
 def getNearestStop(lat: float, lon: float)->int:
     conn = connectDb()
     #point_2 = request.args.get('point_2')
@@ -9,7 +20,9 @@ def getNearestStop(lat: float, lon: float)->int:
     if data is None:
       raise LookupError
     id, name = data
+    conn.close()
     return id
+  
 def getStop(id):
   conn = connectgtfsDb()
   cursor = conn.cursor()
@@ -19,6 +32,7 @@ def getStop(id):
     raise LookupError
   conn.close()
   return data
+
 def getLocation(stopId):
   conn = connectDb()
   cursor = conn.cursor()

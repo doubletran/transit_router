@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import time
 import psycopg
 load_dotenv()
 def get_db_connection():
@@ -10,6 +11,7 @@ def get_db_connection():
     Returns:
         psycopg.Connection: Connection object for interacting with the PostgreSQL database.
     """
+    start = time.time()
     conn = psycopg.connect(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
@@ -17,4 +19,7 @@ def get_db_connection():
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD")
     )
+    
+    print("Connection time:", time.time() - start)
+    
     return conn
