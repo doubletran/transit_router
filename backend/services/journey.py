@@ -34,7 +34,10 @@ def getJourney(src, dest, dtime):
     destStop = getOrigStopId(leg[2])
     destStopData = getStop(str(destStop))
     stopGeojson= {'type': 'Feature',
-                     'properties': {'id':destStopData["stop_id"], 'name': destStopData["stop_name"], 'mode':'walking'},
+                     'properties': {'id':destStopData["stop_id"], 
+                                    'name': destStopData["stop_name"],
+                                    'departure_time': leg[0],
+                                    'mode':'walking'},
                      'geometry': destStopData["geojson"]}
     if leg[0] != "walking":
       
@@ -47,13 +50,21 @@ def getJourney(src, dest, dtime):
                      'properties': {'color': f'#{routeColor}'},
                      'geometry': trip["geojson"]}
       stopGeojson['properties']['color'] = str.strip(routeColor)
+      stopGeojson['properties']['departure_time'] = leg[0].strftime("%H:%M")
+      stopGeojson['properties']['arrival_time'] = leg[3].strftime("%H:%M")
     else:
       trip = Transfer.getTransfer(srcStop, destStop)
       print("Get trip ", trip)
       routeGeojson= {'type': 'Feature',
                      'properties': {'time': trip['min_transfer_time']},
                      'geometry': trip["geojson"]}
-      
+      total_seconds = int(leg[3].total_seconds())
+      h, rem = divmod(total_seconds, 3600)
+      m, s = divmod(rem, 60)
+      m = max(1, m)
+      stopGeojson['properties']['walking_time'] = f"{m:02} min"
+      stopGeojson['properties']['arrival_time'] = leg[4].strftime("%H:%M")
+
 
       
     stops.append(stopGeojson)
