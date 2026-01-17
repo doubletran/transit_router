@@ -38,54 +38,55 @@ export const Sidebar = ({
     <div className="w-2/6 h-screen p-1 flex flex-col  overflow-y-auto">
       <div className='px-3'>
         <h1 className="font-montserrat font-black text-2xl text-center mt-4">
-          Transit Planner
+          TransitOut
         </h1>
         <img src={logo} className='h-[100px] m-auto'/> {/* Logo de la aplicación */}
-        <h3 className="font-montserrat font-bold text-sm mt-5 mb-1 tracking-widest">
-          ORIGIN
-        </h3>
+
         <Input
-          text={'Desde'}
+          text={'Origin'}
           Icon={FaRegCircleDot}
           inputRef={originRef}
           onFocus={() => setFocusedInput('origin')} // Establecer el input enfocado en origen
         />
-        <h3 className="font-montserrat font-bold text-sm mt-5 mb-1 tracking-widest">
-          DESTINATION
-        </h3>
+      <div className='py-3'></div>
         <Input
-          text={'Hasta'}
+          text={'Destination'}
           Icon={FaLocationDot}
           inputRef={destinationRef}
           onFocus={() => setFocusedInput('destination')} // Establecer el input enfocado en destino
         />
         <div className="self-center justify-center mt-6 flex flex-row gap-2">
-          <Button onClick={onGetRoute} text='Calculate Route' color="bg-[#4361EE]" />
+          <Button onClick={onGetRoute} text='Go' color="bg-[#4361EE]" />
           {data.length > 0 && (
             <Button onClick={onClean} text={<PiBroomBold />} color="bg-[#D51E43] text-xl font-bold" /> 
           )}
         </div>
-        <h3 className="font-montserrat font-bold text-sm mt-5  tracking-widest">
-          Journey
-        </h3>
-      </div>
 
+
+      </div>
       {loading && (
         <div className="self-center mt-4">
-          <PulseLoader color="#4A90E2" loading={loading} size={10} /> {/* Spinner de carga */}
+          <PulseLoader color="#4A90E2" loading={loading} size={10} />
         </div>
       )}
-        <div className="mt-3">
-        {data.length > 0 ? (
 
-            <ResultCard
-            journey={data}
-            />
-          )
-         : (
-          <p>Aún no hay resultados</p> // Mensaje cuando no hay resultados
-        )}
-      </div>
+      {loading == false&& (
+        <>
+          <h3 className="font-montserrat font-bold text-sm mt-5 tracking-widest">
+            Result
+          </h3>
+
+          {data.length > 0 ? (
+            <ResultCard journey={data} />
+          ) : (
+            <p>No route is found</p>
+          )}
+        </>
+      )}
+
+
+
+   
     </div>
 
  

@@ -20,7 +20,7 @@ function App() {
   const [journey, setJourney] = useState<Trip[]>([]) // Estado para los datos de la ruta
   const [focusedInput, setFocusedInput] = useState<'origin' | 'destination' | null>(null) // Estado para el input enfocado
   const [selectedRoutes, setSelectedRoutes] = useState<Feature<Geometry>[]>([]) // Estado para las rutas seleccionadas
-  const [loading, setLoading] = useState(true) // Estado de carga
+  const [loading, setLoading] = useState<null | true | false>(null) // Estado de carga
   const [stops, setStops] = useState<Feature<Geometry>[]>([])
    const [error, setError] = useState(null)
   // Crear referencias para los inputs
