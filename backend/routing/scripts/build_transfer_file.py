@@ -33,7 +33,7 @@ def extract_graph(NETWORK_NAME: str) -> tuple:
         >>> G, stops_list = extract_graph("anaheim", breaker)
     """
     try:
-        G = pickle.load(open(os.path.join(DATA_PATH, "gtfs_o", f"{NETWORK_NAME}_G.pickle" ), 'rb'))
+        G = pickle.load(open(os.path.join(DATA_PATH, "gtfs_o", f"{NETWORK_NAME}_walk_G.pickle" ), 'rb'))
         #G = pickle.load(open(f"./Data/GTFS/{NETWORK_NAME}/gtfs_o/{NETWORK_NAME}_G.pickle", 'rb'))
         print(G)
         # G = nx.read_gpickle(f"./GTFS/{NETWORK_NAME}/gtfs_o/{NETWORK_NAME}_G.pickle")
@@ -41,12 +41,12 @@ def extract_graph(NETWORK_NAME: str) -> tuple:
     except (FileNotFoundError, ValueError, AttributeError) as error:
         print(f"Graph import failed {error}. Extracting OSM graph for {NETWORK_NAME}")
         LOCATION_NAME = "San Francisco"
-        G = ox.graph_from_place(f"San Francisco", network_type='drive')
+        G = ox.graph_from_place(f"San Francisco", network_type='walk')
         # TODO: Change this to bound box + 1 km
         print(f"Number of Edges: {len(G.edges())}")
         print(f"Number of Nodes: {len(G.nodes())}")
         print(f"Saving {NETWORK_NAME}")
-        pickle.dump(G, open(f"./Data/GTFS/{NETWORK_NAME}/gtfs_o/{NETWORK_NAME}_G.pickle", 'wb'))
+        pickle.dump(G, open(os.path.join(DATA_PATH, "gtfs_o",f"{NETWORK_NAME}_walk_G.pickle"), 'wb'))
         # nx.write_gpickle(G, f"./GTFS/{NETWORK_NAME}/gtfs_o/{NETWORK_NAME}_G.pickle")
     stops_db = pd.DataFrame(StopService.getAllStops())
 
@@ -196,7 +196,7 @@ def build_transfer(NETWORK_NAME):
     print(f"Importing into database {len(transfer_db)} paths")
 
     transfer_df = pd.DataFrame(transfer_db, columns=['src_stop_id', 'dest_stop_id', 'min_transfer_time', 'path'])
-    TransferService.updateTransfers(transfer_df)
+    TransferService.importData(transfer_df)
     #print(transfer_df)
 
     #print(result)

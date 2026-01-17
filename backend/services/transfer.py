@@ -1,8 +1,24 @@
 import psycopg, json
 from db import connectgtfsDb
+from config import DB_DIR
+import os
 
-def updateTransfers(transfers):
+def initTable():
+  conn = connectgtfsDb()
+  curr = conn.cursor()
+  try:
+    with open(os.path.join(DB_DIR, "create_transfer.sql"), "r") as f:
+      sql = f.read()
+    curr.execute(sql)
+    conn.commit()
+  except Exception as e:
+    conn.rollback()
+    conn.close()
+    raise RuntimeError(f"Transfer Table failed: {e}")
+  return conn
   
+def importData(transfers):
+  conn = initTable()
   sql = """
   INSERT INTO transfers (src_stop_id, dest_stop_id, min_transfer_time, path)
   VALUES (%s, %s, %s, ST_GeomFromGeoJSON(%s::jsonb))
@@ -14,7 +30,7 @@ def updateTransfers(transfers):
     min_transfer_time = EXCLUDED.min_transfer_time,
     path = EXCLUDED.path;
   """
-  conn = connectgtfsDb()
+
   with conn.cursor() as cur:
 
       rows = [
@@ -37,5 +53,3 @@ def getTransfer(stop1, stop2):
   if data is None:
       raise LookupError
   return data
-
-  
