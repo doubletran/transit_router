@@ -78,16 +78,28 @@ export const Map = ({ setOrigin, origin, destination, onMapDoubleClick, selected
           })}  
            />
         ))}
-        {stops.length > 0 && stops.map((route, index) => (
+        {stops.length > 0 && stops.map((geojson, index) => (
       
         <GeoJSON
           key={index}
-          data={route} // Datos de la ruta en formato GeoJSON
-          style={() => ({
-            color: route.properties?.color || '#000000', // Color de la ruta
-            weight: 5, // Grosor de la línea de la ruta
-            opacity: 0.8, // Opacidad de la línea de la ruta
-          })}
+          data={geojson} // Datos de la ruta en formato GeoJSON
+          pointToLayer={(feature, latlng) => {
+
+            if (index === 0 || index === stops.length - 1) {
+              // FIRST or LAST → normal marker
+              return L.marker(latlng)
+            }
+
+
+            // MIDDLE → transfer circle
+            return L.circleMarker(latlng, {
+              radius: 5,
+              color: "#6B7280",
+              fillColor: "#9CA3AF",
+              fillOpacity: 1,
+              weight: 2,
+            })
+          }}
           />
         ))}
        
