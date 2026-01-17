@@ -1,7 +1,7 @@
 
-# Transit GeoRouter
+# TransitOut
 
-**Transit GeoRouter** is a full-stack web application for public transportation in **San Francisco**, built using **GTFS data**, **Node.js**, **React**, **TypeScript**, and **PostgreSQL**.
+**TransitOut** is a full-stack web application for public transportation in **San Francisco**, built using **GTFS data**, **Node.js**, **React**, **TypeScript**, and **PostgreSQL**.
 
 This project provides tools to explore transit routes and stops, view schedules, and perform **GTFS-based trip planning** using official **SFMTA** data. The routing algorithm used is **RAPTOR**, as proposed in the paper referenced below. RAPTOR is a round-based algorithm that efficiently computes routes without relying on a graph network.
 
